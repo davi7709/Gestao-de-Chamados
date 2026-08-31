@@ -50,6 +50,14 @@ public class ChamadoController {
         return ResponseEntity.ok(resposta);
     }
 
+    @GetMapping("/atrasados")
+    public ResponseEntity<List<ChamadoResponse>> listarAtrasados() {
+        List<ChamadoResponse> resposta = service.buscarAtrasados().stream()
+                .map(ChamadoResponse::from)
+                .toList();
+        return ResponseEntity.ok(resposta);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ChamadoResponse> buscarPorId(@PathVariable Long id) {
         Chamado chamado = service.buscaPorId(id);

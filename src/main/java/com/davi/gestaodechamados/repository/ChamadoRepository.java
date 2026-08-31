@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ChamadoRepository extends JpaRepository<Chamado, Long> {
     List<Chamado> findByStatus(Status status);
+    List<Chamado> findByStatusNotIn(List<Status> status);
 }

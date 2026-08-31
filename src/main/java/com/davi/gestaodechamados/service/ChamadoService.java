@@ -1,10 +1,12 @@
 package com.davi.gestaodechamados.service;
 
 import com.davi.gestaodechamados.enums.Status;
+import com.davi.gestaodechamados.exception.ChamadoNaoEncontradoException;
 import com.davi.gestaodechamados.model.Chamado;
 import com.davi.gestaodechamados.repository.ChamadoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class ChamadoService {
     }
 
     public Chamado buscaPorId(Long id){
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(() -> new ChamadoNaoEncontradoException(id));
     }
 
     public List<Chamado> buscaPorStatus(Status status){
@@ -52,5 +54,19 @@ public class ChamadoService {
         existente.setDataUltimaAtualizacao(LocalDateTime.now());
 
         return repository.save(existente);
+    }
+
+    public List<Chamado> buscarAtrasados(){
+    List<Status> statusFinalizados = List.of(Status.RESOLVIDO, Status.ENCERRADO);
+    List<Chamado> ativos = repository.findByStatusNotIn(statusFinalizados);
+
+    return ativos.stream()
+            .filter(this::estaAtrasado)
+            .toList();
+    }
+
+    private boolean estaAtrasado(Chamado chamado) {
+        long horasParado = Duration.between(chamado.getDataUltimaAtualizacao(), LocalDateTime.now()).toHours();
+        return horasParado > chamado.getPrioridade().getLimiteHoras();
     }
 }

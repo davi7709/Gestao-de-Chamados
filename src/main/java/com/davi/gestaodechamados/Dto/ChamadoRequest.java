@@ -1,7 +1,6 @@
 package com.davi.gestaodechamados.Dto;
 
 import com.davi.gestaodechamados.enums.Prioridade;
-import com.davi.gestaodechamados.enums.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
