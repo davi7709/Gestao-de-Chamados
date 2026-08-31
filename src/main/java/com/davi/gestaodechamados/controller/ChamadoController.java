@@ -23,7 +23,6 @@ public class ChamadoController {
         this.service = service;
     }
 
-    // POST /api/chamados -> cadastrar um chamado novo
     @PostMapping
     public ResponseEntity<ChamadoResponse> criar(@Valid @RequestBody ChamadoRequest request) {
         Chamado chamado = new Chamado(
@@ -36,8 +35,6 @@ public class ChamadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ChamadoResponse.from(salvo));
     }
 
-    // GET /api/chamados -> listar todos
-    // GET /api/chamados?status=EM_ANDAMENTO -> filtrar por status
     @GetMapping
     public ResponseEntity<List<ChamadoResponse>> listar(
             @RequestParam(required = false) Status status) {
@@ -53,14 +50,12 @@ public class ChamadoController {
         return ResponseEntity.ok(resposta);
     }
 
-    // GET /api/chamados/5 -> buscar um específico
     @GetMapping("/{id}")
     public ResponseEntity<ChamadoResponse> buscarPorId(@PathVariable Long id) {
         Chamado chamado = service.buscaPorId(id);
         return ResponseEntity.ok(ChamadoResponse.from(chamado));
     }
 
-    // PUT /api/chamados/5 -> editar dados gerais
     @PutMapping("/{id}")
     public ResponseEntity<ChamadoResponse> editar(
             @PathVariable Long id,

@@ -21,7 +21,9 @@ public class Chamado {
     private Prioridade prioridade;
     @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(name = "data_abertura", nullable = false, updatable = false)
     private LocalDateTime dataAbertura;
+    @Column(name = "data_ultima_atualizacao", nullable = false)
     private LocalDateTime dataUltimaAtualizacao;
 
     public Chamado(){}
@@ -117,5 +119,15 @@ public class Chamado {
     @Override
     public int hashCode() {
         return Objects.hashCode(Id);
+    }
+
+    @PrePersist
+    protected void aoCriar() {
+        LocalDateTime agora = LocalDateTime.now();
+        this.dataAbertura = agora;
+        this.dataUltimaAtualizacao = agora;
+        if (this.status == null) {
+            this.status = Status.NOVO;
+        }
     }
 }
