@@ -2,7 +2,7 @@
 
 API REST para gestão de chamados, desenvolvida como desafio técnico. Permite cadastrar, listar, filtrar e atualizar chamados, além de identificar automaticamente os que estão há muito tempo sem atendimento.
 
-Front-end React que consome esta API: [chamados-frontend](../../chamados-frontend) *(ajuste o link para o repositório real)*.
+Front-end React que consome esta API: [chamados-frontend](https://github.com/davi7709/Chamados-Frontend) .
 
 ## Tecnologias utilizadas
 
