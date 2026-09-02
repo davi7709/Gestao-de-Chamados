@@ -103,7 +103,7 @@ Um chamado é considerado atrasado quando o tempo desde sua última atualizaçã
 
 **Por que baseado em `dataUltimaAtualizacao`, e não em `dataAbertura`?** Um chamado pode ter sido aberto há uma semana mas atualizado há 1 hora — o que importa para a regra de atraso é há quanto tempo ninguém mexe nele, não há quanto tempo ele existe.
 
-**Por que a regra vive no enum, e não em `application.properties`/`@Value`?** É uma modelagem mais orientada a objetos — o limite de SLA é um dado que pertence à prioridade em si, não uma configuração de infraestrutura. Também evita depender de anotações do Spring nesse ponto específico.
+**Por que a regra vive no enum, e não em `application-dev.properties`/`@Value`?** É uma modelagem mais orientada a objetos — o limite de SLA é um dado que pertence à prioridade em si, não uma configuração de infraestrutura. Também evita depender de anotações do Spring nesse ponto específico.
 
 Chamados `RESOLVIDO` e `ENCERRADO` nunca entram nessa checagem — não faz sentido marcar como atrasado algo que já foi finalizado.
 
