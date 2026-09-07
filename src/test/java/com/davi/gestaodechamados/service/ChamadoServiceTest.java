@@ -4,6 +4,10 @@ import com.davi.gestaodechamados.enums.Prioridade;
 import com.davi.gestaodechamados.enums.Status;
 import com.davi.gestaodechamados.exception.ChamadoNaoEncontradoException;
 import com.davi.gestaodechamados.model.Chamado;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.davi.gestaodechamados.repository.ChamadoRepository;
 import org.junit.jupiter.api.Test;
@@ -72,11 +76,16 @@ class ChamadoServiceTest {
     void deveListarTodosOsChamados() {
         Chamado c1 = new Chamado("A", "desc", "Davi", Prioridade.BAIXA);
         Chamado c2 = new Chamado("B", "desc", "Ana", Prioridade.ALTA);
-        when(repository.findAll()).thenReturn(List.of(c1, c2));
 
-        List<Chamado> resultado = service.todosChamados();
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<Chamado> paginaFake = new PageImpl<>(List.of(c1, c2), pageable, 2);
 
-        assertEquals(2, resultado.size());
+        when(repository.findAll(pageable)).thenReturn(paginaFake);
+
+        Page<Chamado> resultado = service.todosChamados(pageable);
+
+        assertEquals(2, resultado.getTotalElements());
+        assertEquals(2, resultado.getContent().size());
     }
 
     // ---------- buscarPorStatus ----------
@@ -85,12 +94,16 @@ class ChamadoServiceTest {
     void deveFiltrarChamadosPorStatus() {
         Chamado chamado = new Chamado("A", "desc", "Davi", Prioridade.MEDIA);
         chamado.setStatus(Status.EM_ANDAMENTO);
-        when(repository.findByStatus(Status.EM_ANDAMENTO)).thenReturn(List.of(chamado));
 
-        List<Chamado> resultado = service.buscaPorStatus(Status.EM_ANDAMENTO);
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<Chamado> paginaFake = new PageImpl<>(List.of(chamado), pageable, 1);
 
-        assertEquals(1, resultado.size());
-        assertEquals(Status.EM_ANDAMENTO, resultado.get(0).getStatus());
+        when(repository.findByStatus(Status.EM_ANDAMENTO, pageable)).thenReturn(paginaFake);
+
+        Page<Chamado> resultado = service.buscaPorStatus(Status.EM_ANDAMENTO, pageable);
+
+        assertEquals(1, resultado.getTotalElements());
+        assertEquals(Status.EM_ANDAMENTO, resultado.getContent().get(0).getStatus());
     }
 
     // ---------- editarChamado ----------
