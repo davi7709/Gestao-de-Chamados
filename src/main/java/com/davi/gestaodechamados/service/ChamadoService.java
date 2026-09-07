@@ -4,6 +4,8 @@ import com.davi.gestaodechamados.enums.Status;
 import com.davi.gestaodechamados.exception.ChamadoNaoEncontradoException;
 import com.davi.gestaodechamados.model.Chamado;
 import com.davi.gestaodechamados.repository.ChamadoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -23,12 +25,20 @@ public class ChamadoService {
         return repository.findAll();
     }
 
+    public Page<Chamado> todosChamados(Pageable pageable){
+        return repository.findAll(pageable);
+    }
+
     public Chamado buscaPorId(Long id){
         return repository.findById(id).orElseThrow(() -> new ChamadoNaoEncontradoException(id));
     }
 
     public List<Chamado> buscaPorStatus(Status status){
         return repository.findByStatus(status);
+    }
+
+    public Page<Chamado> buscaPorStatus(Status status, Pageable pageable){
+        return repository.findByStatus(status, pageable);
     }
 
     public Chamado criarChamado(Chamado chamado){

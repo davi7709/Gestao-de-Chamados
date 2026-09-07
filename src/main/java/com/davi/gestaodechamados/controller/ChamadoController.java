@@ -7,6 +7,8 @@ import com.davi.gestaodechamados.enums.Status;
 import com.davi.gestaodechamados.model.Chamado;
 import com.davi.gestaodechamados.service.ChamadoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,16 +38,15 @@ public class ChamadoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ChamadoResponse>> listar(
-            @RequestParam(required = false) Status status) {
+    public ResponseEntity<Page<ChamadoResponse>> listar(
+            @RequestParam(required = false) Status status, Pageable pageable) {
 
-        List<Chamado> chamados = (status != null)
-                ? service.buscaPorStatus(status)
-                : service.todosChamados();
+        Page<Chamado> pagina = (status != null)
+                ? service.buscaPorStatus(status, pageable)
+                : service.todosChamados(pageable);
 
-        List<ChamadoResponse> resposta = chamados.stream()
-                .map(ChamadoResponse::from)
-                .toList();
+        Page<ChamadoResponse> resposta = pagina
+                .map(ChamadoResponse::from);
 
         return ResponseEntity.ok(resposta);
     }
