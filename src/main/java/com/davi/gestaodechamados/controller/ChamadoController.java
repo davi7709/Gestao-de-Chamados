@@ -1,11 +1,11 @@
 package com.davi.gestaodechamados.controller;
 
-import com.davi.gestaodechamados.Dto.ChamadoRequest;
-import com.davi.gestaodechamados.Dto.ChamadoResponse;
-import com.davi.gestaodechamados.Dto.StatusUpdateRequest;
+import com.davi.gestaodechamados.Dto.*;
 import com.davi.gestaodechamados.enums.Status;
 import com.davi.gestaodechamados.model.Chamado;
+import com.davi.gestaodechamados.model.Comentario;
 import com.davi.gestaodechamados.service.ChamadoService;
+import com.davi.gestaodechamados.service.ComentarioService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +19,12 @@ import java.util.List;
 @RequestMapping("/api/chamados")
 public class ChamadoController {
 
-    private final ChamadoService service;
+    private final ChamadoService chamadoService;
+    private final ComentarioService comentarioService;
 
-    public ChamadoController(ChamadoService service){
-        this.service = service;
+    public ChamadoController(ChamadoService service, ComentarioService comentarioService) {
+        this.chamadoService = service;
+        this.comentarioService = comentarioService;
     }
 
     @PostMapping
@@ -33,7 +35,7 @@ public class ChamadoController {
                 request.solicitante(),
                 request.prioridade()
         );
-        Chamado salvo = service.criarChamado(chamado);
+        Chamado salvo = chamadoService.criarChamado(chamado);
         return ResponseEntity.status(HttpStatus.CREATED).body(ChamadoResponse.from(salvo));
     }
 
@@ -42,8 +44,8 @@ public class ChamadoController {
             @RequestParam(required = false) Status status, Pageable pageable) {
 
         Page<Chamado> pagina = (status != null)
-                ? service.buscaPorStatus(status, pageable)
-                : service.todosChamados(pageable);
+                ? chamadoService.buscaPorStatus(status, pageable)
+                : chamadoService.todosChamados(pageable);
 
         Page<ChamadoResponse> resposta = pagina
                 .map(ChamadoResponse::from);
@@ -53,7 +55,7 @@ public class ChamadoController {
 
     @GetMapping("/atrasados")
     public ResponseEntity<List<ChamadoResponse>> listarAtrasados() {
-        List<ChamadoResponse> resposta = service.buscarAtrasados().stream()
+        List<ChamadoResponse> resposta = chamadoService.buscarAtrasados().stream()
                 .map(ChamadoResponse::from)
                 .toList();
         return ResponseEntity.ok(resposta);
@@ -61,7 +63,7 @@ public class ChamadoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ChamadoResponse> buscarPorId(@PathVariable Long id) {
-        Chamado chamado = service.buscaPorId(id);
+        Chamado chamado = chamadoService.buscaPorId(id);
         return ResponseEntity.ok(ChamadoResponse.from(chamado));
     }
 
@@ -76,17 +78,37 @@ public class ChamadoController {
                 request.solicitante(),
                 request.prioridade()
         );
-        Chamado atualizado = service.editarChamado(id, dadosAtualizados);
+        Chamado atualizado = chamadoService.editarChamado(id, dadosAtualizados);
         return ResponseEntity.ok(ChamadoResponse.from(atualizado));
     }
 
-    // PATCH /api/chamados/5/status -> alterar só o status
+    //alterar só o status
     @PatchMapping("/{id}/status")
     public ResponseEntity<ChamadoResponse> alterarStatus(
             @PathVariable Long id,
             @Valid @RequestBody StatusUpdateRequest request) {
 
-        Chamado atualizado = service.alteraChamado(id, request.status());
+        Chamado atualizado = chamadoService.alteraChamado(id, request.status());
         return ResponseEntity.ok(ChamadoResponse.from(atualizado));
     }
+
+    //Adiciona Comentario
+    @PostMapping("/{id}/comentarios")
+    public ResponseEntity<ComentarioResponse> adicionarComentario(@PathVariable Long id, @Valid @RequestBody ComentarioRequest request) {
+        Comentario criado = new Comentario(
+                request.texto()
+        );
+        Comentario salvo = comentarioService.adicionarComentario(id, request.texto());
+        return ResponseEntity.status(HttpStatus.CREATED).body(ComentarioResponse.from(criado));
+    }
+
+    //Lista Comentario
+    @GetMapping("/{id}/comentarios")
+    public ResponseEntity<List<ComentarioResponse>> listarComentarios(@PathVariable Long id) {
+        List<ComentarioResponse> resposta = comentarioService.listarComentarios(id).stream()
+                .map(ComentarioResponse::from)
+                .toList();
+        return ResponseEntity.ok(resposta);
+    }
+
 }

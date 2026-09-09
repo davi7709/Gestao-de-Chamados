@@ -17,7 +17,6 @@ public record ChamadoResponse(
         LocalDateTime dataUltimaAtualizacao
 ) {
 
-    // Factory method: converte a entidade JPA em DTO de resposta
     public static ChamadoResponse from(Chamado chamado) {
         return new ChamadoResponse(
                 chamado.getId(),
