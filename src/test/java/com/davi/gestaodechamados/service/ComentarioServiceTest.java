@@ -36,7 +36,7 @@ class ComentarioServiceTest {
 
         Comentario salvo = new Comentario();
         salvo.setId(10L);
-        salvo.setTexto("Testando o primeiro comentário");
+        salvo.setComentario("Testando o primeiro comentário");
         salvo.setChamado(chamado);
 
         when(chamadoService.buscaPorId(1L)).thenReturn(chamado);
@@ -45,7 +45,7 @@ class ComentarioServiceTest {
         Comentario resultado = comentarioService.adicionarComentario(1L, "Testando o primeiro comentário");
 
         assertNotNull(resultado.getId());
-        assertEquals("Testando o primeiro comentário", resultado.getTexto());
+        assertEquals("Testando o primeiro comentário", resultado.getComentario());
         verify(chamadoService, times(1)).buscaPorId(1L);
         verify(comentarioRepository, times(1)).save(any(Comentario.class));
     }
@@ -67,9 +67,9 @@ class ComentarioServiceTest {
         chamado.setId(1L);
 
         Comentario c1 = new Comentario();
-        c1.setTexto("Primeiro comentário");
+        c1.setComentario("Primeiro comentário");
         Comentario c2 = new Comentario();
-        c2.setTexto("Segundo comentário");
+        c2.setComentario("Segundo comentário");
 
         when(chamadoService.buscaPorId(1L)).thenReturn(chamado);
         when(comentarioRepository.findByChamadoId(1L)).thenReturn(List.of(c1, c2));

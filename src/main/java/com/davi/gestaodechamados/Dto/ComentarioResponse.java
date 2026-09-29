@@ -8,7 +8,7 @@ public record ComentarioResponse(Long id, String comentario, LocalDateTime dataC
     public static ComentarioResponse from(Comentario comentario) {
         return new ComentarioResponse(
                 comentario.getId(),
-                comentario.getTexto(),
+                comentario.getComentario(),
                 comentario.getDataCriacao()
         );
     }

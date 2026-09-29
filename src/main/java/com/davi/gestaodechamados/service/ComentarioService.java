@@ -23,13 +23,13 @@ public class ComentarioService {
         return comentarioRepository.findByChamadoId(chamadoId);
     }
 
-    public Comentario adicionarComentario(Long chamadoId, String texto) {
+    public Comentario adicionarComentario(Long chamadoId, String comentario) {
         Chamado chamado = chamadoService.buscaPorId(chamadoId);
 
-        Comentario comentario = new Comentario();
-        comentario.setTexto(texto);
-        comentario.setChamado(chamado);
+        Comentario coment = new Comentario();
+        coment.setComentario(comentario);
+        coment.setChamado(chamado);
 
-        return comentarioRepository.save(comentario);
+        return comentarioRepository.save(coment);
     }
 }

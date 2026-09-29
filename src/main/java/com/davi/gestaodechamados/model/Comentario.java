@@ -13,7 +13,7 @@ public class Comentario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 1000)
-    private String texto;
+    private String comentario;
     private LocalDateTime dataCriacao;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="chamado_id")
@@ -21,15 +21,15 @@ public class Comentario {
 
     public Comentario() {}
 
-    public Comentario(Long id, String texto, LocalDateTime dataCriacao,  Chamado chamado) {
+    public Comentario(Long id, String comentario, LocalDateTime dataCriacao,  Chamado chamado) {
         this.id = id;
-        this.texto = texto;
+        this.comentario = comentario;
         this.dataCriacao = dataCriacao;
         this.chamado = chamado;
     }
 
-    public Comentario(String texto){
-        this.texto = texto;
+    public Comentario(String comentario){
+        this.comentario = comentario;
     }
 
     public Long getId() {
@@ -40,12 +40,12 @@ public class Comentario {
         this.id = id;
     }
 
-    public String getTexto() {
-        return texto;
+    public String getComentario() {
+        return comentario;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 
     public LocalDateTime getDataCriacao() {

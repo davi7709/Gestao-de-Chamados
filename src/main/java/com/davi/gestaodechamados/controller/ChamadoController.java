@@ -96,10 +96,10 @@ public class ChamadoController {
     @PostMapping("/{id}/comentarios")
     public ResponseEntity<ComentarioResponse> adicionarComentario(@PathVariable Long id, @Valid @RequestBody ComentarioRequest request) {
         Comentario criado = new Comentario(
-                request.texto()
+                request.comentario()
         );
-        Comentario salvo = comentarioService.adicionarComentario(id, request.texto());
-        return ResponseEntity.status(HttpStatus.CREATED).body(ComentarioResponse.from(criado));
+        Comentario salvo = comentarioService.adicionarComentario(id, request.comentario());
+        return ResponseEntity.status(HttpStatus.CREATED).body(ComentarioResponse.from(salvo));
     }
 
     //Lista Comentario
