@@ -1,5 +1,6 @@
 package com.davi.gestaodechamados.service;
 
+import com.davi.gestaodechamados.enums.Categoria;
 import com.davi.gestaodechamados.enums.Prioridade;
 import com.davi.gestaodechamados.enums.Status;
 import com.davi.gestaodechamados.exception.ChamadoNaoEncontradoException;
@@ -37,8 +38,8 @@ class ChamadoServiceTest {
 
     @Test
     void deveCriarChamadoERetornarComIdGerado() {
-        Chamado novo = new Chamado("Impressora não liga", "desc", "Davi", Prioridade.ALTA);
-        Chamado salvo = new Chamado("Impressora não liga", "desc", "Davi", Prioridade.ALTA);
+        Chamado novo = new Chamado("Impressora não liga", "desc", "Davi", Categoria.HARDWARE, Prioridade.ALTA);
+        Chamado salvo = new Chamado("Impressora não liga", "desc", "Davi", Categoria.HARDWARE, Prioridade.ALTA);
         salvo.setId(1L); // simula o que o banco faria
 
         when(repository.save(novo)).thenReturn(salvo);
@@ -54,7 +55,7 @@ class ChamadoServiceTest {
 
     @Test
     void deveRetornarChamadoQuandoIdExiste() {
-        Chamado chamado = new Chamado("Título", "desc", "Davi", Prioridade.MEDIA);
+        Chamado chamado = new Chamado("Título", "desc", "Davi",Categoria.HARDWARE, Prioridade.MEDIA);
         when(repository.findById(1L)).thenReturn(Optional.of(chamado));
 
         Chamado resultado = service.buscaPorId(1L);
@@ -74,8 +75,8 @@ class ChamadoServiceTest {
 
     @Test
     void deveListarTodosOsChamados() {
-        Chamado c1 = new Chamado("A", "desc", "Davi", Prioridade.BAIXA);
-        Chamado c2 = new Chamado("B", "desc", "Ana", Prioridade.ALTA);
+        Chamado c1 = new Chamado("A", "desc", "Davi",Categoria.ACESSO, Prioridade.BAIXA);
+        Chamado c2 = new Chamado("B", "desc", "Ana",Categoria.ACESSO, Prioridade.ALTA);
 
         Pageable pageable = PageRequest.of(0, 20);
         Page<Chamado> paginaFake = new PageImpl<>(List.of(c1, c2), pageable, 2);
@@ -92,7 +93,7 @@ class ChamadoServiceTest {
 
     @Test
     void deveFiltrarChamadosPorStatus() {
-        Chamado chamado = new Chamado("A", "desc", "Davi", Prioridade.MEDIA);
+        Chamado chamado = new Chamado("A", "desc", "Davi",Categoria.SOFTWARE, Prioridade.MEDIA);
         chamado.setStatus(Status.EM_ANDAMENTO);
 
         Pageable pageable = PageRequest.of(0, 20);
@@ -110,10 +111,10 @@ class ChamadoServiceTest {
 
     @Test
     void deveEditarDadosGeraisDoChamado() {
-        Chamado existente = new Chamado("Título antigo", "desc antiga", "Davi", Prioridade.BAIXA);
+        Chamado existente = new Chamado("Título antigo", "desc antiga", "Davi",Categoria.REDE, Prioridade.BAIXA);
         existente.setId(1L);
 
-        Chamado dadosNovos = new Chamado("Título novo", "desc nova", "Davi", Prioridade.ALTA);
+        Chamado dadosNovos = new Chamado("Título novo", "desc nova", "Davi",Categoria.REDE, Prioridade.ALTA);
 
         when(repository.findById(1L)).thenReturn(Optional.of(existente));
         when(repository.save(any(Chamado.class))).thenReturn(existente);
@@ -126,7 +127,7 @@ class ChamadoServiceTest {
 
     @Test
     void deveLancarExcecaoAoEditarChamadoInexistente() {
-        Chamado dadosNovos = new Chamado("Título", "desc", "Davi", Prioridade.ALTA);
+        Chamado dadosNovos = new Chamado("Título", "desc", "Davi",Categoria.OUTROS, Prioridade.ALTA);
         when(repository.findById(999L)).thenReturn(Optional.empty());
 
         assertThrows(ChamadoNaoEncontradoException.class,
@@ -137,7 +138,7 @@ class ChamadoServiceTest {
 
     @Test
     void deveAlterarStatusEAtualizarData() {
-        Chamado chamado = new Chamado("Título", "desc", "Davi", Prioridade.MEDIA);
+        Chamado chamado = new Chamado("Título", "desc", "Davi",Categoria.REDE, Prioridade.MEDIA);
         LocalDateTime dataAntiga = LocalDateTime.now().minusDays(1);
         chamado.setDataUltimaAtualizacao(dataAntiga);
 
@@ -154,7 +155,7 @@ class ChamadoServiceTest {
 
     @Test
     void chamadoCriticoParadoDeveEstarAtrasado() {
-        Chamado chamado = new Chamado("Servidor caiu", "desc", "Davi", Prioridade.CRITICA);
+        Chamado chamado = new Chamado("Servidor caiu", "desc", "Davi",Categoria.HARDWARE, Prioridade.CRITICA);
         chamado.setDataUltimaAtualizacao(LocalDateTime.now().minusHours(5));
         chamado.setStatus(Status.EM_ANDAMENTO);
 
@@ -167,7 +168,7 @@ class ChamadoServiceTest {
 
     @Test
     void chamadoBaixaPrioridadeParadoPoucoTempoNaoDeveEstarAtrasado() {
-        Chamado chamado = new Chamado("Pedido de acesso", "desc", "Davi", Prioridade.BAIXA);
+        Chamado chamado = new Chamado("Pedido de acesso", "desc", "Davi",Categoria.ACESSO, Prioridade.BAIXA);
         chamado.setDataUltimaAtualizacao(LocalDateTime.now().minusHours(5));
         chamado.setStatus(Status.NOVO);
 

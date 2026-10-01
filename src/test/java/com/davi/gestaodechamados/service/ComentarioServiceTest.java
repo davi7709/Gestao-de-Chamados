@@ -1,5 +1,6 @@
 package com.davi.gestaodechamados.service;
 
+import com.davi.gestaodechamados.enums.Categoria;
 import com.davi.gestaodechamados.exception.ChamadoNaoEncontradoException;
 import com.davi.gestaodechamados.model.Chamado;
 import com.davi.gestaodechamados.model.Comentario;
@@ -31,7 +32,7 @@ class ComentarioServiceTest {
 
     @Test
     void deveAdicionarComentarioAoChamadoExistente() {
-        Chamado chamado = new Chamado("Impressora não liga", "desc", "Davi", Prioridade.ALTA);
+        Chamado chamado = new Chamado("Impressora não liga", "desc", "Davi", Categoria.REDE, Prioridade.ALTA);
         chamado.setId(1L);
 
         Comentario salvo = new Comentario();
@@ -63,7 +64,7 @@ class ComentarioServiceTest {
 
     @Test
     void deveListarComentariosDeUmChamadoExistente() {
-        Chamado chamado = new Chamado("Título", "desc", "Davi", Prioridade.MEDIA);
+        Chamado chamado = new Chamado("Título", "desc", "Davi",Categoria.REDE, Prioridade.MEDIA);
         chamado.setId(1L);
 
         Comentario c1 = new Comentario();
