@@ -51,6 +51,7 @@ public class ChamadoService {
         existente.setTitulo(dadosAtualizados.getTitulo());
         existente.setDescricao(dadosAtualizados.getDescricao());
         existente.setSolicitante(dadosAtualizados.getSolicitante());
+        existente.setCategoria(dadosAtualizados.getCategoria());
         existente.setPrioridade(dadosAtualizados.getPrioridade());
         existente.setDataUltimaAtualizacao(LocalDateTime.now());
 

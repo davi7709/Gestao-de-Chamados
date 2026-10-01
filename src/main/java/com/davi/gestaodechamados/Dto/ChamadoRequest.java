@@ -1,5 +1,6 @@
 package com.davi.gestaodechamados.Dto;
 
+import com.davi.gestaodechamados.enums.Categoria;
 import com.davi.gestaodechamados.enums.Prioridade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,9 @@ public record ChamadoRequest(
 
         @NotBlank(message = "O solicitante e obrigatorio")
         String solicitante,
+
+        @NotNull(message = "A categoria e obrigatoria")
+        Categoria categoria,
 
         @NotNull(message = "A prioridade e obrigatoria")
         Prioridade prioridade

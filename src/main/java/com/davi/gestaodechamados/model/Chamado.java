@@ -1,5 +1,6 @@
 package com.davi.gestaodechamados.model;
 
+import com.davi.gestaodechamados.enums.Categoria;
 import com.davi.gestaodechamados.enums.Prioridade;
 import com.davi.gestaodechamados.enums.Status;
 import jakarta.persistence.*;
@@ -18,6 +19,8 @@ public class Chamado {
     private String descricao;
     private String solicitante;
     @Enumerated(EnumType.STRING)
+    private Categoria categoria;
+    @Enumerated(EnumType.STRING)
     private Prioridade prioridade;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -28,17 +31,19 @@ public class Chamado {
 
     public Chamado(){}
 
-    public Chamado(String titulo, String descricao, String solicitante, Prioridade prioridade) {
+    public Chamado(String titulo, String descricao, String solicitante,Categoria categoria, Prioridade prioridade) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.solicitante = solicitante;
+        this.categoria = categoria;
         this.prioridade = prioridade;
     }
 
-    public Chamado(String titulo, String descricao, String solicitante, Prioridade prioridade, Status status, LocalDateTime dataAbertura, LocalDateTime dataUltimaAtualizacao) {
+    public Chamado(String titulo, String descricao, String solicitante, Categoria categoria, Prioridade prioridade, Status status, LocalDateTime dataAbertura, LocalDateTime dataUltimaAtualizacao) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.solicitante = solicitante;
+        this.categoria = categoria;
         this.prioridade = prioridade;
         this.status = status;
         this.dataAbertura = dataAbertura;
@@ -85,6 +90,14 @@ public class Chamado {
         this.solicitante = solicitante;
     }
 
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
     public Prioridade getPrioridade() {
         return prioridade;
     }
@@ -128,6 +141,9 @@ public class Chamado {
         this.dataUltimaAtualizacao = agora;
         if (this.status == null) {
             this.status = Status.NOVO;
+        }
+        if(this.categoria == null) {
+            this.categoria = Categoria.OUTROS;
         }
     }
 }

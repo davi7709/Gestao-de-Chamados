@@ -11,7 +11,7 @@ import java.util.List;
 public class ComentarioService {
 
     private final ComentarioRepository comentarioRepository;
-    private ChamadoService chamadoService;
+    private final ChamadoService chamadoService;
 
     public ComentarioService(ComentarioRepository repository, ChamadoService chamadoService) {
         this.comentarioRepository = repository;

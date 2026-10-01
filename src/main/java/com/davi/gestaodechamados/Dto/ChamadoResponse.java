@@ -1,5 +1,6 @@
 package com.davi.gestaodechamados.Dto;
 
+import com.davi.gestaodechamados.enums.Categoria;
 import com.davi.gestaodechamados.enums.Prioridade;
 import com.davi.gestaodechamados.enums.Status;
 import com.davi.gestaodechamados.model.Chamado;
@@ -11,6 +12,7 @@ public record ChamadoResponse(
         String titulo,
         String descricao,
         String solicitante,
+        Categoria categoria,
         Prioridade prioridade,
         Status status,
         LocalDateTime dataAbertura,
@@ -23,6 +25,7 @@ public record ChamadoResponse(
                 chamado.getTitulo(),
                 chamado.getDescricao(),
                 chamado.getSolicitante(),
+                chamado.getCategoria(),
                 chamado.getPrioridade(),
                 chamado.getStatus(),
                 chamado.getDataAbertura(),

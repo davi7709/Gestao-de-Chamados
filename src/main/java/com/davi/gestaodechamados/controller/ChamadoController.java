@@ -33,8 +33,8 @@ public class ChamadoController {
                 request.titulo(),
                 request.descricao(),
                 request.solicitante(),
-                request.prioridade()
-        );
+                request.categoria(),
+                request.prioridade());
         Chamado salvo = chamadoService.criarChamado(chamado);
         return ResponseEntity.status(HttpStatus.CREATED).body(ChamadoResponse.from(salvo));
     }
@@ -76,6 +76,7 @@ public class ChamadoController {
                 request.titulo(),
                 request.descricao(),
                 request.solicitante(),
+                request.categoria(),
                 request.prioridade()
         );
         Chamado atualizado = chamadoService.editarChamado(id, dadosAtualizados);
